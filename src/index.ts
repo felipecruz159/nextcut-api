@@ -14,3 +14,5 @@ app.use("/api", routes)
 app.listen(PORT, () => {
     console.log(`Server is running on ${process.env.APP_URL}`);
 });
+
+
