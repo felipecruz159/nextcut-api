@@ -1,15 +1,16 @@
-import express, {Express, Request, Response} from 'express';
+import express, { Express } from 'express';
 import dotenv from 'dotenv';
+import routes from './routes/router';
 
-dotenv.config({path: ".env"});
+dotenv.config({ path: ".env" });
 const PORT = process.env.PORT;
-
 const app: Express = express();
+
+app.use(express.json());
+
+// Use the service routes
+app.use("/api", routes)
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${process.env.APP_URL}`);
-})
-
-app.get('/', (req: Request, res: Response) => {
-    res.send('Working');
-})
+});
