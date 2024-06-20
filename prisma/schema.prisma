@@ -13,5 +13,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// TODO: CREATE TABLE
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  bookings      Booking[]
+}
 
+model Barbershop {
+  id       String    @id @default(uuid())
+  name     String
+  address  String
+  imageUrl String
+  bookings Booking[]
+  services Service[]
+}
+
+model Booking {
+  id           String     @id @default(uuid())
+  barbershopId String
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  serviceId    String
+  service      Service    @relation(fields: [serviceId], references: [id])
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  date         DateTime   @db.Timestamp
+}
+
+model Service {
+  id           String     @id @default(uuid())
+  barbershopId String
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  name         String
+  description  String
+  price        Decimal    @db.Decimal(10, 2)
+  imageUrl     String
+  bookings     Booking[]
+}
