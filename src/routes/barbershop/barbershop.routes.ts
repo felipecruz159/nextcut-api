@@ -1,10 +1,8 @@
 import { Router, Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import barbershopController from './barbershop.controller';
 
 const router = Router();
-const db = new PrismaClient();
 
-
-
+router.get('/barbershop', barbershopController.get)
 
 export default router;
