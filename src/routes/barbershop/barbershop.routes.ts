@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import barbershopController from './barbershop.controller';
 
 const router = Router();
