@@ -1,12 +1,14 @@
-import serviceRoute from './service/services.routes';
-import barbershopRoute from './barbershop/barbershop.routes';
-import BarberDetailsRoute from './barberDetails/barberDetails.routes'
-import loginRoute from './login/login.routes';
+import serviceRoute from '../controller/application/service/services.routes';
+import barbershopRoute from '../controller/application/barbershop/barbershop.routes';
+import BarberDetailsRoute from '../controller/application/barberDetails/barberDetails.routes'
+import loginRoute from '../controller/client/login/login.routes';
+import registerRoute from '../controller/client/register/register.routes';
 
 export default [
     serviceRoute,
     barbershopRoute,
     BarberDetailsRoute,
     loginRoute,
+    registerRoute,
 ];
 
