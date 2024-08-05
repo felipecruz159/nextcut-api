@@ -15,7 +15,6 @@ export default {
                 where: { email: (email)},
             });
 
-            console.log(user);
             if(!user || !user.password) {
                 return res.status(401).json({ error: "Email ou senha inválido" });
             }

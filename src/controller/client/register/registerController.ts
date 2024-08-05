@@ -18,6 +18,14 @@ export default {
       const { name, email, password } = req.body;
 
       try {
+         const emailExists = await db.user.findUnique({
+            where: {email: (email)},
+         });
+
+         if(emailExists) {
+            return res.status(409).json({ error: 'Email já cadastrado!'})
+         }
+
          const hashedPassword = await bcrypt.hash(password, 10);
 
          const user = await db.user.create({
