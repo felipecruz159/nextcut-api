@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from "express";
 import bcrypt from 'bcryptjs';
+import { sendEmail } from '../../../utils/sendEmail'
 
 const db = new PrismaClient();
 
@@ -35,6 +36,10 @@ export default {
                password: hashedPassword,
             },
          });
+
+         //Send verification email
+         await sendEmail({email, emailType: 'verify', userId: user.id})
+
          return res.status(201).json(user);
       } catch (error) {
          console.error('Error Creating User:', error);

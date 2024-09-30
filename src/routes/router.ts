@@ -3,6 +3,7 @@ import barbershopRoute from '../controller/application/barbershop/barbershop.rou
 import BarberDetailsRoute from '../controller/application/barberDetails/barberDetails.routes'
 import loginRoute from '../controller/client/login/login.routes';
 import registerRoute from '../controller/client/register/register.routes';
+import verifyEmailRoute from '../controller/client/verifyEmail/verifyEmail.routes';
 
 export default [
     serviceRoute,
@@ -10,5 +11,6 @@ export default [
     BarberDetailsRoute,
     loginRoute,
     registerRoute,
+    verifyEmailRoute
 ];
 
