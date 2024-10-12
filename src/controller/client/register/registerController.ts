@@ -19,11 +19,11 @@ export default {
 
       try {
          const emailExists = await db.user.findUnique({
-            where: {email: (email)},
+            where: { email: (email) },
          });
 
-         if(emailExists) {
-            return res.status(409).json({ error: 'Email já cadastrado!'})
+         if (emailExists) {
+            return res.status(409).json({ error: 'Email já cadastrado!' })
          }
 
          const hashedPassword = await bcrypt.hash(password, 10);
@@ -33,6 +33,7 @@ export default {
                name,
                email,
                password: hashedPassword,
+               type: "client"
             },
          });
          return res.status(201).json(user);

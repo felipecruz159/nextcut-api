@@ -41,6 +41,7 @@ export default {
                         name,
                         email,
                         image,
+                        type: "client"
                     },
                 });
             }
@@ -60,7 +61,6 @@ export default {
                         access_token,
                         expires_at,
                         token_type,
-                        type,
                         scope,
                         session_state,
                         refresh_token,

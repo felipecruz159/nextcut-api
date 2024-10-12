@@ -16,7 +16,6 @@ datasource db {
 model Account {
   id                String  @id @default(cuid())
   userId            String
-  type              String
   provider          String
   providerAccountId String
   afiliateAccountId String?
@@ -42,37 +41,64 @@ model Session {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  password      String?
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  bookings      Booking[]
-  ratings       Rating[]
+model VerificationToken {
+  id      String   @id @default(cuid())
+  token   String   @unique
+  code    String?
+  expires DateTime
+  userId  String   @unique
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token, userId])
 }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
+model Address {
+  id           String       @id @default(cuid())
+  userId       String?
+  barbershopId String?
+  neighborhood String
+  number       Int
+  street       String
+  state        String
+  city         String
+  zipCode      String       @db.VarChar(10)
+  Barbershop   Barbershop[]
+  User         User?        @relation(fields: [userId], references: [id])
+}
 
-  @@unique([identifier, token])
+model User {
+  id                String              @id @default(cuid())
+  name              String?
+  email             String?             @unique
+  password          String?
+  emailVerified     DateTime?
+  image             String?
+  type              String
+  phone             String?
+  address           Address[]
+  accounts          Account[]
+  sessions          Session[]
+  bookings          Booking[]
+  ratings           Rating[]
+  verificationToken VerificationToken[]
+  barbershop        Barbershop[]
 }
 
 model Barbershop {
-  id       String    @id @default(uuid())
-  name     String
-  address  String
-  imageUrl String
-  rating   String?
-  ratings  Rating[]
-  workers  Worker[]
-  bookings Booking[]
-  services Service[]
+  id        String    @id @default(uuid())
+  name      String
+  imageUrl  String
+  rating    String?
+  phone     String?
+  ratings   Rating[]
+  workers   Worker[]
+  bookings  Booking[]
+  services  Service[]
+  address   Address?  @relation(fields: [addressId], references: [id])
+  addressId String?
+  User      User?     @relation(fields: [userId], references: [id])
+  userId    String?
 }
 
 model Booking {
