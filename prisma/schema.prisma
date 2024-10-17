@@ -89,16 +89,16 @@ model Barbershop {
   id        String    @id @default(uuid())
   name      String
   imageUrl  String
-  rating    String?
   phone     String?
-  ratings   Rating[]
   workers   Worker[]
   bookings  Booking[]
   services  Service[]
   address   Address?  @relation(fields: [addressId], references: [id])
   addressId String?
   User      User?     @relation(fields: [userId], references: [id])
+  Rating    Rating?   @relation(fields: [ratingId], references: [id])
   userId    String?
+  ratingId  String?
 }
 
 model Booking {
@@ -137,8 +137,10 @@ model Rating {
   userId       String
   barbershopId String
   comment      String?
-  rate         String
+  appraiser    Int     @default(0)
+  rating       Int     @default(0)
 
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  barbershop Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  Barbershop Barbershop[]
 }

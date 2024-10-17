@@ -10,6 +10,10 @@ export default {
       try {
          const barbershop = await db.barbershop.findUnique({
             where: { id: (id) },
+            include: {
+               address: true,
+               Rating: true
+            },
          });
 
          if (!barbershop) {

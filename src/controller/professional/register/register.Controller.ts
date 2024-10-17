@@ -13,7 +13,7 @@ interface IRegisterBarbershopRequest extends Request {
       state: string;
       city: string;
       number: number;
-      email: string
+      email: string;
    }
 }
 
@@ -24,8 +24,10 @@ interface IEmailCheck extends Request {
 }
 
 export default {
-   async register(req: IRegisterBarbershopRequest, res: Response): Promise<Response> {
+   async register(req: any, res: Response): Promise<Response> {
       const { name, phone, email, CEP, street, number, neighborhood, city, state } = req.body;
+      const imageFile = req.file;
+
       try {
          const user = await db.user.findUnique({
             where: { email: email },
@@ -60,10 +62,12 @@ export default {
                userId: user.id,
             },
          });
+
+         const imageName = imageFile ? imageFile.filename : '';
          const newBarbershop = await db.barbershop.create({
             data: {
                name,
-               imageUrl: '',
+               imageUrl: imageName,
                phone,
                userId: user.id,
                addressId: newAddress.id,
@@ -78,7 +82,7 @@ export default {
    },
 
    async emailCheck(req: IEmailCheck, res: Response): Promise<Response> {
-      const { email } = req.query;
+      const { email } = req.body;
 
       if (!email || typeof email !== 'string') {
          return res.status(400).json({ available: false, error: "Email não fornecido." });
@@ -99,5 +103,3 @@ export default {
       return res.status(200).json({ available: true });
    }
 };
-
-
