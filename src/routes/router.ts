@@ -4,6 +4,7 @@ import BarberDetailsRoute from '../controller/application/barberDetails/barberDe
 import loginRoute from '../controller/client/login/login.routes';
 import registerRoute from '../controller/client/register/register.routes';
 import registerProfessionalRoute from '../controller/professional/register/register.routes'
+import verifyEmailRoute from '../controller/client/verifyEmail/verifyEmail.routes';
 
 export default [
     serviceRoute,
@@ -12,5 +13,6 @@ export default [
     loginRoute,
     registerRoute,
     registerProfessionalRoute,
+    verifyEmailRoute
 ];
 
