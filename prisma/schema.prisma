@@ -44,7 +44,6 @@ model Session {
 model VerificationToken {
   id      String   @id @default(cuid())
   token   String   @unique
-  code    String?
   expires DateTime
   userId  String   @unique
 

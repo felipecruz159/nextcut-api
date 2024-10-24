@@ -6,6 +6,7 @@ import registerRoute from '../controller/client/register/register.routes';
 import registerProfessionalRoute from '../controller/professional/register/register.routes'
 import verifyEmailRoute from '../controller/client/verifyEmail/verifyEmail.routes';
 import userByEmailRoute from '../controller/client/user/userById.routes'
+import resetPasswordRoute from '../controller/client/resetPassword/resetPassword.routes';
 
 export default [
     serviceRoute,
@@ -14,6 +15,8 @@ export default [
     loginRoute,
     registerRoute,
     registerProfessionalRoute,
+    verifyEmailRoute,
+    resetPasswordRoute,
     verifyEmailRoute,
     userByEmailRoute
 ];

@@ -2,6 +2,8 @@ import nodemailer from 'nodemailer';
 import bcryptjs from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
 import EmailVerificationProps from '../types/EmailVerificationProps';
+import htmlVerifyEmailTemplate from './htmlVerifyEmailTemplate';
+import htmlResetPasswordTemplate from './htmlResetPasswordTemplate';
 
 const db = new PrismaClient();
 
@@ -30,12 +32,12 @@ export const sendEmail = async ({ email, emailType, userId }: EmailVerificationP
                 where: { userId: userId },
                 update: {
                     token: hashedToken,
-                    expires: new Date(Date.now() + 300000), // 5 minutes
+                    expires: new Date(Date.now() + 3600000), // 1 hour
                 },
                 create: {
                     userId: userId,
                     token: hashedToken,
-                    expires: new Date(Date.now() + 300000), // 5 minutes
+                    expires: new Date(Date.now() + 3600000), // 1 hour
                 }
             })
         }
@@ -50,17 +52,21 @@ export const sendEmail = async ({ email, emailType, userId }: EmailVerificationP
             }
         });
 
+        const urlDomain = 'http://localhost:3000/';
+        const urlVerifyEmail = urlDomain + 'verifyemail?token=' + hashedToken;
+        const urlResetPassword = urlDomain + 'reset-password?token=' + hashedToken;
+
         const mailOptions = {
             from: process.env.SMTP_EMAIL,
             to: email,
             subject: emailType === 'verify' ? "Verifique o seu email" : "Recuperação de senha",
-            html: emailType === 'verify' ? `<p>Teste Verifique</p><a href="http://localhost:3000/verifyemail?token=${hashedToken}">Clique aqui</a>` : `<p>Teste Recupere</p><a href="http://localhost:3000/verifyemail?token=${hashedToken}">Clique aqui</a>`
+            html: emailType === 'verify' ? htmlVerifyEmailTemplate(urlVerifyEmail) : htmlResetPasswordTemplate(urlResetPassword)
             // TODO: Make an email layout 
         }
 
-        const mailresponse = await transport.sendMail(mailOptions);
+        const mailResponse = await transport.sendMail(mailOptions);
 
-        return mailresponse;
+        return mailResponse;
     } catch (error: any) {
         throw new Error(error.message);
     }
