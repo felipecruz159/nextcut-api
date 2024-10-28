@@ -1,27 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from "express";
+import { IEmailCheck, ServiceFormData } from '../../../types/generic';
 
 const db = new PrismaClient();
-
-interface IRegisterBarbershopRequest extends Request {
-   body: {
-      name: string;
-      phone: string;
-      CEP: string;
-      neighborhood: string;
-      street: string;
-      state: string;
-      city: string;
-      number: number;
-      email: string;
-   }
-}
-
-interface IEmailCheck extends Request {
-   body: {
-      email: string;
-   }
-}
 
 export default {
    async register(req: any, res: Response): Promise<Response> {
@@ -101,5 +82,30 @@ export default {
       }
 
       return res.status(200).json({ available: true });
-   }
+   },
+   async registerService(req: Request, res: Response): Promise<Response> {
+      const { name, description, price, category, time, barbershopId } = req.body as ServiceFormData;
+
+      try {
+         if (!barbershopId) {
+            return res.status(400).json({ error: 'ID da barbearia é obrigatório para associar o serviço.' });
+         }
+
+         const newService = await db.service.create({
+            data: {
+               name,
+               description,
+               price,
+               category,
+               time,
+               barbershopId,
+            },
+         });
+
+         return res.status(201).json(newService);
+      } catch (error) {
+         console.error('Erro ao registrar serviço:', error);
+         return res.status(500).json({ error: 'Erro ao registrar o serviço.' });
+      }
+   },
 };
