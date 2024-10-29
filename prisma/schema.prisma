@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Account {
-  id                String  @id @default(cuid())
+  id                String  @id @default(uuid())
   userId            String
   provider          String
   providerAccountId String
@@ -33,7 +33,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           String   @id @default(uuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -42,7 +42,7 @@ model Session {
 }
 
 model VerificationToken {
-  id      String   @id @default(cuid())
+  id      String   @id @default(uuid())
   token   String   @unique
   expires DateTime
   userId  String   @unique
@@ -53,7 +53,7 @@ model VerificationToken {
 }
 
 model Address {
-  id           String       @id @default(cuid())
+  id           String       @id @default(uuid())
   userId       String?
   barbershopId String?
   neighborhood String
@@ -67,7 +67,7 @@ model Address {
 }
 
 model User {
-  id                String              @id @default(cuid())
+  id                String              @id @default(uuid())
   name              String?
   email             String?             @unique
   password          String?
@@ -82,22 +82,24 @@ model User {
   ratings           Rating[]
   verificationToken VerificationToken[]
   barbershop        Barbershop[]
+  Favorite          Favorite[]
 }
 
 model Barbershop {
-  id        String    @id @default(uuid())
+  id        String     @id @default(uuid())
   name      String
   imageUrl  String
   phone     String?
   workers   Worker[]
   bookings  Booking[]
   services  Service[]
-  address   Address?  @relation(fields: [addressId], references: [id])
+  address   Address?   @relation(fields: [addressId], references: [id])
   addressId String?
-  User      User?     @relation(fields: [userId], references: [id])
-  Rating    Rating?   @relation(fields: [ratingId], references: [id])
+  User      User?      @relation(fields: [userId], references: [id])
+  Rating    Rating?    @relation(fields: [ratingId], references: [id])
   userId    String?
   ratingId  String?
+  Favorite  Favorite[]
 }
 
 model Booking {
@@ -125,7 +127,7 @@ model Service {
 }
 
 model Worker {
-  id           String @id @default(cuid())
+  id           String @id @default(uuid())
   barbershopId String
   name         String
   imageUrl     String
@@ -134,7 +136,7 @@ model Worker {
 }
 
 model Rating {
-  id           String  @id @default(cuid())
+  id           String  @id @default(uuid())
   userId       String
   barbershopId String
   comment      String?
@@ -144,4 +146,14 @@ model Rating {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   Barbershop Barbershop[]
+}
+
+model Favorite {
+  id           String     @id @default(uuid())
+  userId       String
+  barbershopId String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  barbershop   Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, barbershopId])
 }
