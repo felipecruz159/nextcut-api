@@ -1,9 +1,3 @@
-export interface IEmailCheck {
-   body: {
-      email: string;
-   }
-}
-
 export interface ServiceFormData {
    name: string;
    description: string;

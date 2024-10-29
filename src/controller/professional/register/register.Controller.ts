@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Request, Response } from "express";
-import { IEmailCheck, ServiceFormData } from '../../../types/generic';
+import { ServiceFormData } from '../../../types/generic';
 
 const db = new PrismaClient();
 
@@ -62,8 +62,8 @@ export default {
       }
    },
 
-   async emailCheck(req: IEmailCheck, res: Response): Promise<Response> {
-      const { email } = req.body;
+   async emailCheck(req: Request, res: Response): Promise<Response> {
+      const { email } = req.query;
 
       if (!email || typeof email !== 'string') {
          return res.status(400).json({ available: false, error: "Email não fornecido." });
