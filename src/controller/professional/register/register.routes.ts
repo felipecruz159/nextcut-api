@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import multerConfig from '../../../config/multer'; // ajuste o caminho conforme necessário
-import registerController from './register.Controller';
-import emailCheckController from './register.Controller';
-import registerServiceController from './register.Controller';
+import registerController from './register.controller';
+import emailCheckController from './register.controller';
+import registerServiceController from './register.controller';
 import multer from 'multer';
 
 const router = Router();

@@ -86,20 +86,22 @@ model User {
 }
 
 model Barbershop {
-  id        String     @id @default(uuid())
-  name      String
-  imageUrl  String
-  phone     String?
-  workers   Worker[]
-  bookings  Booking[]
-  services  Service[]
-  address   Address?   @relation(fields: [addressId], references: [id])
-  addressId String?
-  User      User?      @relation(fields: [userId], references: [id])
-  Rating    Rating?    @relation(fields: [ratingId], references: [id])
-  userId    String?
-  ratingId  String?
-  Favorite  Favorite[]
+  id         String     @id @default(uuid())
+  name       String
+  imageUrl   String
+  phone      String?
+  workers    Worker[]
+  bookings   Booking[]
+  services   Service[]
+  address    Address?   @relation(fields: [addressId], references: [id])
+  addressId  String?
+  User       User?      @relation(fields: [userId], references: [id])
+  appraiser  Int?       @default(0)
+  totalStars Int?       @default(0)
+  rating     Float?     @default(0)
+  userId     String?
+  Favorite   Favorite[]
+  Rating     Rating[]
 }
 
 model Booking {
@@ -143,9 +145,8 @@ model Rating {
   appraiser    Int     @default(0)
   rating       Int     @default(0)
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  Barbershop Barbershop[]
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  barbershop Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
 }
 
 model Favorite {
