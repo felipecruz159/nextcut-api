@@ -3,9 +3,6 @@ import { PrismaClient } from '@prisma/client';
 
 const db = new PrismaClient();
 
-/**
- * Requisition that returns all the barbershops with their addresses
- */
 export default {
     async get(req: Request, res: Response) {
         try {
@@ -19,6 +16,29 @@ export default {
             res.status(200).json(barbershops);
         } catch (error) {
             console.error("Error fetching barbershops:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    },
+
+    async getById(req: Request, res: Response) {
+        const { id } = req.params;
+
+        try {
+            const barbershop = await db.barbershop.findUnique({
+                where: { id },
+                include: {
+                    address: true,
+                    Rating: true,
+                },
+            });
+
+            if (!barbershop) {
+                return res.status(404).json({ error: "Barbearia não encontrada" });
+            }
+
+            res.status(200).json(barbershop);
+        } catch (error) {
+            console.error("Error fetching barbershop by ID:", error);
             res.status(500).json({ error: "Internal Server Error" });
         }
     },

@@ -66,4 +66,24 @@ export default {
          return res.status(500).json({ message: "Erro interno do servidor." });
       }
    },
+
+   async getFavorites(req: Request, res: Response): Promise<Response> {
+      const { userId } = req.params;
+
+      if (!userId) {
+         return res.status(400).json({ message: "userId é obrigatório." });
+      }
+
+      try {
+         const favorites = await db.favorite.findMany({
+            where: { userId },
+            include: { barbershop: true },
+         });
+
+         return res.json(favorites);
+      } catch (error) {
+         console.error("Erro ao obter favoritos do usuário:", error);
+         return res.status(500).json({ message: "Erro interno do servidor." });
+      }
+   },
 };
