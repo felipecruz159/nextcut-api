@@ -8,6 +8,7 @@ import verifyEmailRoute from '../controller/client/verifyEmail/verifyEmail.route
 import userByEmailRoute from '../controller/client/user/userById.routes'
 import resetPasswordRoute from '../controller/client/resetPassword/resetPassword.routes';
 import saveFavoriteRoute from '../controller/professional/favorite/favorite.routes';
+import updateAccountRoute from '../controller/client/account-info/account.routes';
 
 export default [
     serviceRoute,
@@ -20,6 +21,7 @@ export default [
     resetPasswordRoute,
     verifyEmailRoute,
     userByEmailRoute,
-    saveFavoriteRoute
+    saveFavoriteRoute,
+    updateAccountRoute,
 ];
 

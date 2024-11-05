@@ -26,7 +26,6 @@ export const sendEmail = async ({ email, emailType, userId }: EmailVerificationP
                 }
             })
         }
-        //TODO: Reset password function
         else if (emailType === 'reset') {
             await db.verificationToken.upsert({
                 where: { userId: userId },
@@ -48,7 +47,6 @@ export const sendEmail = async ({ email, emailType, userId }: EmailVerificationP
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASSWORD
-                //   TODO: Change this and add to .env file
             }
         });
 
@@ -61,7 +59,6 @@ export const sendEmail = async ({ email, emailType, userId }: EmailVerificationP
             to: email,
             subject: emailType === 'verify' ? "Verifique o seu email" : "Recuperação de senha",
             html: emailType === 'verify' ? htmlVerifyEmailTemplate(urlVerifyEmail) : htmlResetPasswordTemplate(urlResetPassword)
-            // TODO: Make an email layout 
         }
 
         const mailResponse = await transport.sendMail(mailOptions);
