@@ -90,6 +90,8 @@ model Barbershop {
   name       String
   imageUrl   String
   phone      String?
+  about      String?
+  operation  String?
   workers    Worker[]
   bookings   Booking[]
   services   Service[]
