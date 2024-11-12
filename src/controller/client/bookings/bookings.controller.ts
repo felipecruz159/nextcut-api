@@ -84,6 +84,9 @@ export default {
                         name: true,
                     }
                 }
+            },
+            orderBy: {
+                date: 'asc',
             }
         });
 
