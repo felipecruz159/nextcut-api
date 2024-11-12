@@ -28,7 +28,7 @@ export default {
                 }
             });
 
-            
+
             return res.status(200).json({
                 message: "Agendamentos encontrados com sucesso!",
                 bookings,
@@ -39,7 +39,7 @@ export default {
             return;
         }
     },
-    
+
     async countBookings(req: Request, res: Response) {
         const { email } = req.query;
 
@@ -50,10 +50,49 @@ export default {
         const totalBookings = await db.booking.count({
             where: { userId: user?.id },
         });
-        
+
         return res.status(200).json({
             message: "Agendamentos contados com sucesso!",
             totalBookings,
         });
+    },
+
+    async getNextBookings(req: Request, res: Response) {
+        const { email } = req.query;
+
+        const user = await db.user.findUnique({
+            where: { email: email as string }
+        });
+
+        const bookings = await db.booking.findMany({
+            where: {
+                userId: user?.id,
+                AND: [
+                    { date: { gt: new Date() } },
+                    { status: 'Pendente' },
+                ]
+            },
+            include: {
+                service: {
+                    select: {
+                        name: true,
+                        // price: true,
+                    }
+                },
+                barbershop: {
+                    select: {
+                        name: true,
+                    }
+                }
+            }
+        });
+
+        if (!bookings.length) return;
+
+        return res.status(200).json({
+            message: "Agendamentos encontrados com sucesso!",
+            bookings,
+        });
+
     }
 }
