@@ -101,7 +101,7 @@ model Barbershop {
   appraiser  Int?       @default(0)
   totalStars Int?       @default(0)
   rating     Float?     @default(0)
-  userId     String?
+  userId     String?    @unique
   Favorite   Favorite[]
   Rating     Rating[]
 }

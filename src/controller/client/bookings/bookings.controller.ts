@@ -57,6 +57,8 @@ export default {
         });
     },
 
+
+    //Maybe this requisition should be limited by day in the future
     async getNextBookings(req: Request, res: Response) {
         const { email } = req.query;
 
@@ -90,11 +92,64 @@ export default {
             }
         });
 
-        if (!bookings.length) return;
+        let myBarbershopBookings: any = [];
+
+        if (user?.type === 'professional') {
+            const barbershop = await db.barbershop.findUnique({
+                where: {
+                    userId: user?.id,
+                }
+            })
+
+            if (barbershop) {
+                myBarbershopBookings = await db.booking.findMany({
+                    where: {
+                        barbershopId: barbershop.id,
+                        AND: [
+                            { date: { gt: new Date() } },
+                            { status: 'Pendente' },
+                        ]
+                    },
+                    include: {
+                        service: {
+                            select: {
+                                name: true,
+                                // price: true,
+                            }
+                        },
+                        barbershop: {
+                            select: {
+                                name: true,
+                            }
+                        }
+                    },
+                    orderBy: {
+                        date: 'asc',
+                    }
+                });
+            }
+
+            // console.log('myBarbershopBookings', myBarbershopBookings);
+        }
+
+        let combinedBookings = [
+            ...new Map(bookings.concat(myBarbershopBookings).map((booking) => [booking.id, booking])).values()
+        ];
+
+        combinedBookings = combinedBookings.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+        if (!bookings.length && !myBarbershopBookings.length) {
+            return res.status(200).json({
+                message: 'Nenhum agendamento encontrado',
+                combinedBookings: [],
+            })
+        };
+
+        // console.log('combinedBookings', combinedBookings)
 
         return res.status(200).json({
             message: "Agendamentos encontrados com sucesso!",
-            bookings,
+            combinedBookings: combinedBookings,
         });
 
     }
