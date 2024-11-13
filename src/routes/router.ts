@@ -10,6 +10,7 @@ import resetPasswordRoute from '../controller/client/resetPassword/resetPassword
 import saveFavoriteRoute from '../controller/professional/favorite/favorite.routes';
 import updateAccountRoute from '../controller/client/account-info/account.routes';
 import bookingsRoute from '../controller/client/bookings/bookings.routes';
+import informationRoute from '../controller/professional/information/information.routes'
 
 export default [
     serviceRoute,
@@ -25,5 +26,6 @@ export default [
     saveFavoriteRoute,
     updateAccountRoute,
     bookingsRoute,
+    informationRoute
 ];
 
