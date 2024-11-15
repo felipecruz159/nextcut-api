@@ -42,4 +42,27 @@ export default {
             res.status(500).json({ error: "Internal Server Error" });
         }
     },
+
+    async getBySearchQuery(req: Request, res: Response) {
+        const { q: query } = req.params;
+
+        try {
+            const barbershops = await db.barbershop.findMany({
+                where: {
+                    name: {
+                        contains: query,
+                    },
+                },
+                include: {
+                    address: true,
+                    Rating: true,
+                },
+            });
+
+            res.status(200).json(barbershops);
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    }
 };
