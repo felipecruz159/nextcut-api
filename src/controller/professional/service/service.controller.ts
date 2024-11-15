@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 const db = new PrismaClient();
 
 export default {
+   // Obter serviços
    async getServices(req: Request, res: Response): Promise<Response> {
       const { userId } = req.params;
 
@@ -78,6 +79,52 @@ export default {
          return res.json(services);
       } catch (error) {
          console.error("Erro ao buscar serviços:", error);
+         return res.status(500).json({ message: "Erro interno do servidor." });
+      }
+   },
+
+   async updateService(req: Request, res: Response): Promise<Response> {
+      const { serviceId } = req.params;
+      const { name, description, category, price, time } = req.body;
+
+      if (!serviceId) {
+         return res.status(400).json({ message: "serviceId é obrigatório." });
+      }
+
+      try {
+         const updatedService = await db.service.update({
+            where: { id: serviceId },
+            data: {
+               name,
+               description,
+               category,
+               price,
+               time,
+            },
+         });
+
+         return res.json(updatedService);
+      } catch (error) {
+         console.error("Erro ao atualizar o serviço:", error);
+         return res.status(500).json({ message: "Erro interno do servidor." });
+      }
+   },
+
+   async deleteService(req: Request, res: Response): Promise<Response> {
+      const { serviceId } = req.params;
+
+      if (!serviceId) {
+         return res.status(400).json({ message: "serviceId é obrigatório." });
+      }
+
+      try {
+         const deletedService = await db.service.delete({
+            where: { id: serviceId },
+         });
+
+         return res.json({ message: "Serviço excluído com sucesso!", service: deletedService });
+      } catch (error) {
+         console.error("Erro ao excluir o serviço:", error);
          return res.status(500).json({ message: "Erro interno do servidor." });
       }
    },
