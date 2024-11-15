@@ -86,24 +86,26 @@ model User {
 }
 
 model Barbershop {
-  id         String     @id @default(uuid())
-  name       String
-  imageUrl   String
-  phone      String?
-  about      String?
-  operation  String?
-  workers    Worker[]
-  bookings   Booking[]
-  services   Service[]
-  address    Address?   @relation(fields: [addressId], references: [id])
-  addressId  String?
-  User       User?      @relation(fields: [userId], references: [id])
-  appraiser  Int?       @default(0)
-  totalStars Int?       @default(0)
-  rating     Float?     @default(0)
-  userId     String?    @unique
-  Favorite   Favorite[]
-  Rating     Rating[]
+  id             String     @id @default(uuid())
+  name           String
+  imageUrl       String
+  phone          String?
+  about          String?
+  operation      String?
+  specialService Boolean?
+  homeService    Boolean?
+  workers        Worker[]
+  bookings       Booking[]
+  services       Service[]
+  address        Address?   @relation(fields: [addressId], references: [id])
+  addressId      String?
+  User           User?      @relation(fields: [userId], references: [id])
+  appraiser      Int?       @default(0)
+  totalStars     Int?       @default(0)
+  rating         Float?     @default(0)
+  userId         String?    @unique
+  Favorite       Favorite[]
+  Rating         Rating[]
 }
 
 model Booking {
