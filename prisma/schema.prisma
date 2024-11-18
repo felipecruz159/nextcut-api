@@ -67,45 +67,48 @@ model Address {
 }
 
 model User {
-  id                String              @id @default(uuid())
-  name              String?
-  email             String?             @unique
-  password          String?
-  emailVerified     DateTime?
-  image             String?
-  type              String
-  phone             String?
-  address           Address[]
-  accounts          Account[]
-  sessions          Session[]
-  bookings          Booking[]
-  ratings           Rating[]
-  verificationToken VerificationToken[]
-  barbershop        Barbershop[]
-  Favorite          Favorite[]
+  id                 String               @id @default(uuid())
+  name               String?
+  email              String?              @unique
+  password           String?
+  emailVerified      DateTime?
+  image              String?
+  type               String
+  phone              String?
+  address            Address[]
+  accounts           Account[]
+  sessions           Session[]
+  bookings           Booking[]
+  ratings            Rating[]
+  verificationToken  VerificationToken[]
+  barbershop         Barbershop[]
+  Favorite           Favorite[]
+  availableSchedules AvailableSchedules[]
 }
 
 model Barbershop {
-  id             String     @id @default(uuid())
-  name           String
-  imageUrl       String
-  phone          String?
-  about          String?
-  operation      String?
-  specialService Boolean?
-  homeService    Boolean?
-  workers        Worker[]
-  bookings       Booking[]
-  services       Service[]
-  address        Address?   @relation(fields: [addressId], references: [id])
-  addressId      String?
-  User           User?      @relation(fields: [userId], references: [id])
-  appraiser      Int?       @default(0)
-  totalStars     Int?       @default(0)
-  rating         Float?     @default(0)
-  userId         String?    @unique
-  Favorite       Favorite[]
-  Rating         Rating[]
+  id                      String                   @id @default(uuid())
+  name                    String
+  imageUrl                String
+  phone                   String?
+  about                   String?
+  operation               String?
+  specialService          Boolean?
+  homeService             Boolean?
+  workers                 Worker[]
+  bookings                Booking[]
+  services                Service[]
+  address                 Address?                 @relation(fields: [addressId], references: [id])
+  addressId               String?
+  User                    User?                    @relation(fields: [userId], references: [id])
+  appraiser               Int?                     @default(0)
+  totalStars              Int?                     @default(0)
+  rating                  Float?                   @default(0)
+  userId                  String?                  @unique
+  Favorite                Favorite[]
+  Rating                  Rating[]
+  barbershopConfiguration BarbershopConfiguration?
+  availableSchedules      AvailableSchedules[]
 }
 
 model Booking {
@@ -163,4 +166,28 @@ model Favorite {
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
 
   @@unique([userId, barbershopId])
+}
+
+model BarbershopConfiguration {
+  id              String   @id @default(uuid())
+  barbershopId    String   @unique
+  startTime       DateTime
+  endTime         DateTime
+  intervalMinutes Int
+
+  barbershop Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
+}
+
+model AvailableSchedules {
+  id           String   @id @default(uuid())
+  barbershopId String
+  date         DateTime
+  time         DateTime
+  available    Boolean  @default(true)
+  clientId     String? // Relates to the client, if necessary
+  user         User?    @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+  barbershop Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
+
+  @@unique([barbershopId, date, time]) // Prevent duplicate times
 }
