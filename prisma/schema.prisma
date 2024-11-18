@@ -54,8 +54,8 @@ model VerificationToken {
 
 model Address {
   id           String       @id @default(uuid())
-  userId       String?
-  barbershopId String?
+  userId       String?      @unique
+  barbershopId String?      @unique
   neighborhood String
   number       Int
   street       String

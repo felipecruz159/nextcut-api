@@ -32,15 +32,32 @@ export default {
             },
          });
 
-         const newAddress = await db.address.create({
-            data: {
+         const address = db.address.findUnique({
+            where: { 
+               userId: user.id,
+            }
+         })
+
+         const newAddress = await db.address.upsert({
+            where: {
+               userId: user.id,
+            },
+            update:{
                zipCode: CEP,
                street: street,
                number: parsedNumber,
                neighborhood: neighborhood,
                city: city,
                state: state,
+            },
+            create: {
                userId: user.id,
+               zipCode: CEP,
+               street: street,
+               number: parsedNumber,
+               neighborhood: neighborhood,
+               city: city,
+               state: state,
             },
          });
 
