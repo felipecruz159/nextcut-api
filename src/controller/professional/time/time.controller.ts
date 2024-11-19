@@ -18,8 +18,11 @@ export default {
             return res.status(400).json({ message: "Interval minutes must be a valid number." });
          }
 
-         const startTimeISO = new Date(`1970-01-01T${startTime}:00`).toISOString();
-         const endTimeISO = new Date(`1970-01-01T${endTime}:00`).toISOString();
+         const currentDate = new Date().toISOString();
+         const onlyDate = currentDate.split("T")[0];
+
+         const startTimeISO = new Date(`${onlyDate}T${startTime}:00`).toISOString();
+         const endTimeISO = new Date(`${onlyDate}T${endTime}:00`).toISOString();
 
          const configuration = await db.barbershopConfiguration.upsert({
             where: { barbershopId },
@@ -43,6 +46,16 @@ export default {
             current = new Date(current.getTime() + intervalMs);
          }
 
+         await db.availableSchedules.deleteMany({
+            where: {
+               AND: [
+                  { barbershopId },
+                  // { time: { gte: currentDate } },
+                  { available: true }
+               ]
+            }
+         })
+
          await db.availableSchedules.createMany({
             data: availableSchedules,
             skipDuplicates: true,
@@ -60,7 +73,6 @@ export default {
    },
    async getAvailableSchedules(req: Request, res: Response): Promise<Response> {
       const { barbershopId } = req.params;
-      console.log("Chewgeu")
 
       if (!barbershopId) {
          return res.status(400).json({ message: "BarbershopId é obrigatório." });
