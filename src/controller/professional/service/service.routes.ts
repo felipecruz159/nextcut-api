@@ -5,6 +5,7 @@ const router = Router();
 
 router.get('/services/user/:userId', serviceController.getServices);
 router.get('/services/client/:barberShopId', serviceController.getServicesClient);
+router.get('/service/:serviceId', serviceController.getUniqueService);
 router.put('/updateService/:serviceId', serviceController.updateService)
 router.delete('/service/delete/:serviceId', serviceController.deleteService)
 

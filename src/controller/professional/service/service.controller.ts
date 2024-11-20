@@ -110,6 +110,29 @@ export default {
       }
    },
 
+   async getUniqueService(req: Request, res: Response): Promise<Response> {
+      const { serviceId } = req.params;
+
+      if (!serviceId) {
+         return res.status(400).json({ message: "O parâmetro 'serviceId' é obrigatório." });
+      }
+
+      try {
+         const service = await db.service.findUnique({
+            where: { id: serviceId },
+         });
+
+         if (!service) {
+            return res.status(400).json({ message: "Serviço não encontrado." });
+         }
+
+         return res.status(200).json(service);
+      } catch (error) {
+         console.error("Erro ao buscar o serviço:", error);
+         return res.status(500).json({ message: "Erro interno do servidor." });
+      }
+   },
+
    async deleteService(req: Request, res: Response): Promise<Response> {
       const { serviceId } = req.params;
 

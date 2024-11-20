@@ -107,7 +107,7 @@ export default {
    },
 
    async InformationClient(req: Request, res: Response): Promise<Response> {
-      const { barbershopId } = req.params; console.log(barbershopId)
+      const { barbershopId } = req.params;
 
       if (!barbershopId) {
          return res.status(400).json({ message: "barbershopId é obrigatório." });

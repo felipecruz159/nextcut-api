@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { UserType } from '../../../types/generic';
 
 const db = new PrismaClient();
 
@@ -29,11 +30,17 @@ export default {
                 include: {
                     address: true,
                     Rating: true,
+                    User: true,
                 },
             });
 
             if (!barbershop) {
                 return res.status(404).json({ error: "Barbearia não encontrada" });
+            }
+
+            if (barbershop.User) {
+                const { password, ...userWithoutPassword }: any = barbershop.User;
+                barbershop.User = userWithoutPassword;
             }
 
             res.status(200).json(barbershop);
