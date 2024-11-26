@@ -12,6 +12,7 @@ import updateAccountRoute from '../controller/client/account-info/account.routes
 import bookingsRoute from '../controller/client/bookings/bookings.routes';
 import informationRoute from '../controller/professional/information/information.routes'
 import timeServiceRoute from '../controller/professional/time/time.routes'
+import bookingServiceRoute from '../controller/application/booking/booking.routes'
 
 export default [
     serviceRoute,
@@ -28,6 +29,7 @@ export default [
     updateAccountRoute,
     bookingsRoute,
     informationRoute,
-    timeServiceRoute
+    timeServiceRoute,
+    bookingServiceRoute
 ];
 
