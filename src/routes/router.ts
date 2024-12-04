@@ -13,6 +13,7 @@ import bookingsRoute from '../controller/client/bookings/bookings.routes';
 import informationRoute from '../controller/professional/information/information.routes'
 import timeServiceRoute from '../controller/professional/time/time.routes'
 import bookingServiceRoute from '../controller/application/booking/booking.routes'
+import ratingRoute from '../controller/professional/rating/rating.routes';
 
 export default [
     serviceRoute,
@@ -30,6 +31,7 @@ export default [
     bookingsRoute,
     informationRoute,
     timeServiceRoute,
-    bookingServiceRoute
+    bookingServiceRoute,
+    ratingRoute,
 ];
 

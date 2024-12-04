@@ -16,6 +16,7 @@ export default {
                 include: {
                     barbershop: {
                         select: {
+                            id: true,
                             name: true,
                         }
                     },

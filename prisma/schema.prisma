@@ -112,19 +112,22 @@ model Barbershop {
 }
 
 model Booking {
-  id              String     @id @default(uuid())
+  id              String   @id @default(uuid())
   barbershopId    String
-  barbershop      Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
   serviceId       String
-  service         Service    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   userId          String
-  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   status          String
-  date            DateTime   @db.Timestamp
+  date            DateTime @db.Timestamp
   time            String
   paymentMethod   String
-  isSpecial       Boolean    @default(false)
+  isSpecial       Boolean  @default(false)
   serviceLocation String
+
+  barbershop Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
+  service    Service    @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  Rating Rating?
 }
 
 model Service {
@@ -153,12 +156,13 @@ model Rating {
   id           String  @id @default(uuid())
   userId       String
   barbershopId String
+  bookingId    String  @unique
   comment      String?
-  appraiser    Int     @default(0)
   rating       Int     @default(0)
 
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   barbershop Barbershop @relation(fields: [barbershopId], references: [id], onDelete: Cascade)
+  booking    Booking    @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
 
 model Favorite {
