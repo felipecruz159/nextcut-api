@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { UserType } from '../../../types/generic';
 
 const db = new PrismaClient();
 
@@ -65,6 +64,17 @@ export default {
                     Rating: true,
                 },
             });
+
+            res.status(200).json(barbershops);
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    },
+
+    async countBarbershops(req: Request, res: Response) {
+        try {
+            const barbershops = await db.barbershop.count();
 
             res.status(200).json(barbershops);
         } catch (err) {
