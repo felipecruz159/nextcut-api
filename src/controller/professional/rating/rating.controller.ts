@@ -87,8 +87,9 @@ export default {
       const { id } = req.params;
       try {
          const rating = await db.rating.findUnique({
-            where: { id: id }
+            where: { bookingId: id }
          });
+         
 
          return res.status(200).json(rating);
       } catch (err) {
